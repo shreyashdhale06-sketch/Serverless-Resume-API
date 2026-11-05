@@ -1,0 +1,67 @@
+
+{
+  "personal": {
+    "name": "Shreyash Dhale",
+    "title": "B.Sc. Computer Science Student | Aspiring Cloud and Cybersecurity Professional",
+    "location": "Maharashtra, India",
+    "summary": "Third-year B.Sc. Computer Science student interested in cloud computing, cybersecurity, networking and software development.",
+    "email": "shreyashdhale06@gmail",
+    "phone": "ADD YOUR PHONE NUMBER",
+    "github": "https://github.com/shreyashdhale06-sketch"
+  },
+  "experience": [
+    {
+      "role": "Graphic Design Intern",
+      "organization": "ADD YOUR ORGANIZATION NAME",
+      "period": "ADD INTERNSHIP DATES",
+      "description": "Created visual explanations of complex information using Canva and Figma."
+    }
+  ],
+  "education": [
+    {
+      "qualification": "B.Sc. Computer Science",
+      "institution": "ADD YOUR COLLEGE NAME",
+      "period": "Currently in third year",
+      "status": "Pursuing"
+    }
+  ],
+  "skills": {
+    "programming": [
+      "Python",
+      "Java",
+      "C++",
+      "Kotlin"
+    ],
+    "web_database": [
+      "HTML",
+      "SQL",
+      "Databases"
+    ],
+    "tools": [
+      "Canva",
+      "Figma",
+      "Git",
+      "GitHub",
+      "VS Code"
+    ],
+    "interests": [
+      "Cybersecurity",
+      "Networking",
+      "Cloud Computing"
+    ]
+  },
+  "projects": [
+    {
+      "name": "Cybercrime360-Nova",
+      "description": "Cybercrime awareness and reporting website."
+    },
+    {
+      "name": "FocusFlow",
+      "description": "Productivity application with task management, events, diary and AI-assisted planning."
+    },
+    {
+      "name": "CloudShield IR",
+      "description": "Cloud incident response project with runbooks and automated Lambda remediation logic."
+    }
+  ]
+}

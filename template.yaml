@@ -1,0 +1,100 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Serverless Resume API with API Gateway, Lambda, DynamoDB and API key.
+
+Globals:
+  Function:
+    Runtime: python3.12
+    Timeout: 15
+    MemorySize: 128
+    Environment:
+      Variables:
+        RESUME_TABLE: !Ref ResumeTable
+
+Resources:
+  ResumeTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ResumeData
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: PK
+          AttributeType: S
+        - AttributeName: SK
+          AttributeType: S
+      KeySchema:
+        - AttributeName: PK
+          KeyType: HASH
+        - AttributeName: SK
+          KeyType: RANGE
+      SSESpecification:
+        SSEEnabled: true
+
+  ResumeApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: ServerlessResumeApi
+      StageName: Prod
+      Auth:
+        ApiKeyRequired: true
+
+  ResumeFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: ServerlessResumeHandler
+      CodeUri: .
+      Handler: lambda.app.lambda_handler
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ResumeTable
+      Events:
+        GetResume:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ResumeApi
+            Path: /resume
+            Method: GET
+        GetSection:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ResumeApi
+            Path: /resume/{section}
+            Method: GET
+
+  ResumeApiKey:
+    Type: AWS::ApiGateway::ApiKey
+    Properties:
+      Name: ServerlessResumeApiKey
+      Enabled: true
+      StageKeys:
+        - RestApiId: !Ref ResumeApi
+          StageName: Prod
+
+  ResumeUsagePlan:
+    Type: AWS::ApiGateway::UsagePlan
+    Properties:
+      UsagePlanName: ResumeApiBasicPlan
+      ApiStages:
+        - ApiId: !Ref ResumeApi
+          Stage: Prod
+      Throttle:
+        RateLimit: 5
+        BurstLimit: 10
+      Quota:
+        Limit: 1000
+        Period: DAY
+
+  ResumeUsagePlanKey:
+    Type: AWS::ApiGateway::UsagePlanKey
+    Properties:
+      KeyId: !Ref ResumeApiKey
+      KeyType: API_KEY
+      UsagePlanId: !Ref ResumeUsagePlan
+
+Outputs:
+  ResumeApiUrl:
+    Value: !Sub 'https://${ResumeApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/resume'
+  ResumeApiKeyId:
+    Value: !Ref ResumeApiKey
+  ResumeTableName:
+    Value: !Ref ResumeTable
